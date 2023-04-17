@@ -22,7 +22,7 @@ const Navbar = () => {
                 <HomeOutlinedIcon />
 
                 <DarkModeOutlinedIcon />
-                <GridViewOutlinedIcon />
+                
                 <div className="search">
                     <SearchOutlinedIcon />
                     <input type="text" placeholder="Search..." />
@@ -31,7 +31,7 @@ const Navbar = () => {
             <div className="right">
                 <PersonOutlinedIcon />
                 <EmailOutlinedIcon />
-                <NotificationsOutlinedIcon />
+                
                 <div className="user">
                     <img
                         src={Friends}

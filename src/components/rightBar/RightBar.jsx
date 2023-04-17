@@ -34,57 +34,6 @@ const RightBar = () => {
                     </div>
                 </div>
                 <div className="item">
-                    <span>Hoạt động gần đây</span>
-                    <div className="user">
-                        <div className="userInfo">
-                            <img
-                                src={Friends}
-                                alt=""
-                            />
-                            <p>
-                                <span>Thuỳ Linh</span> changed their cover picture
-                            </p>
-                        </div>
-                        <span>1 min ago</span>
-                    </div>
-                    <div className="user">
-                        <div className="userInfo">
-                            <img
-                                src={Friends}
-                                alt=""
-                            />
-                            <p>
-                                <span>Thuỳ Linh</span> changed their cover picture
-                            </p>
-                        </div>
-                        <span>1 min ago</span>
-                    </div>
-                    <div className="user">
-                        <div className="userInfo">
-                            <img
-                                src={Friends}
-                                alt=""
-                            />
-                            <p>
-                                <span>Thuỳ Linh</span> changed their cover picture
-                            </p>
-                        </div>
-                        <span>1 min ago</span>
-                    </div>
-                    <div className="user">
-                        <div className="userInfo">
-                            <img
-                                src={Friends}
-                                alt=""
-                            />
-                            <p>
-                                <span>Thuỳ Linh</span>
-                            </p>
-                        </div>
-                        <span>1 phút trước</span>
-                    </div>
-                </div>
-                <div className="item">
                     <span>Đang hoạt động</span>
                     <div className="user">
                         <div className="userInfo">

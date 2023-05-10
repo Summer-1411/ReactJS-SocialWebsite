@@ -3,11 +3,24 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import DarkModeContextProvider from './context/darkModeContext';
+import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import { store, persistor } from './redux/store';
+import { PersistGate } from 'redux-persist/integration/react'
+import 'react-toastify/dist/ReactToastify.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <DarkModeContextProvider>
+          <App />
+          <ToastContainer />
+        </DarkModeContextProvider>
+      </PersistGate>
+    </Provider>
   </React.StrictMode>
 );
 

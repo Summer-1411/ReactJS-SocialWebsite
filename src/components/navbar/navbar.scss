@@ -2,6 +2,8 @@
 
 .navbar {
     @include themify($themes) {
+
+
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -12,17 +14,19 @@
         top: 0;
         background-color: themed("bg");
         color: themed("textColor");
-        z-index: 999;
-
+        z-index: 9999;
         .left {
             display: flex;
             align-items: center;
             gap: 30px;
 
-            span {
+            span {}
+
+            .logoApp {
+                text-decoration: none;
+                color: themed("logo");
                 font-weight: bold;
                 font-size: 20px;
-                color: themed("logo");
             }
 
             .search {
@@ -35,6 +39,7 @@
 
                 input {
                     border: none;
+                    outline: none;
                     width: 500px;
                     background-color: transparent;
                     color: themed("textColor");
@@ -42,7 +47,6 @@
                     @include mobile {
                         display: none;
                     }
-
                     @include tablet {
                         width: 200px;
                     }
@@ -54,17 +58,15 @@
             display: flex;
             align-items: center;
             gap: 20px;
-
+            font-weight: 500;
             @include mobile {
                 display: none;
             }
-
             .user {
                 display: flex;
-                align-items: center;
                 gap: 10px;
                 font-weight: 500;
-
+                align-items: center;
                 @include tablet {
                     display: none;
                 }
@@ -77,6 +79,15 @@
                 }
 
                 span {}
+            }
+            .btn-logout {
+                padding:5px 10px;
+                cursor: pointer;
+                border: 1px solid themed("border");
+                &:hover {
+                    background-color: rgb(59, 59, 188);
+                    color: white;
+                }
             }
         }
     }

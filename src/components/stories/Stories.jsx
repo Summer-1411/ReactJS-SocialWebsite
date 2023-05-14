@@ -1,52 +1,44 @@
 
+import { Link } from "react-router-dom";
 import "./stories.scss"
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { makeRequest } from "../../axios";
 
-
+import Story from "../story/Story";
 const Stories = () => {
-
-    const  currentUser  = {
-        profilePic: "https://i.pinimg.com/originals/4d/ce/ce/4dceced768a7c6cf8be6b16618f7ee1d.jpg",
-        name: "Tung"
-    }
-
+    const [stories, setStories] = useState([])
+    const currentUser = useSelector((state) => state.user.currentUser);
+    // const [menuOpen, setMenuOpen] = useState(false);
+    useEffect(() => {
+        const getStories = async () => {
+            const res = await makeRequest.get("/stories")
+            console.log({res});
+            setStories(res.data.story)
+        }
+        getStories()
+    }, [currentUser])
     //TEMPORARY
-    const stories = [
-        {
-            id: 1,
-            name: "Thao Bap",
-            img: "https://ss-images.saostar.vn/pc/1676043149351/saostar-tngc8l9lrrpml6tt.jpg",
-        },
-        {
-            id: 2,
-            name: "Thao Bap",
-            img: "https://ss-images.saostar.vn/pc/1676043149351/saostar-tngc8l9lrrpml6tt.jpg",
-        },
-        {
-            id: 3,
-            name: "Thao Bap",
-            img: "https://ss-images.saostar.vn/pc/1676043149351/saostar-tngc8l9lrrpml6tt.jpg",
-        },
-        {
-            id: 4,
-            name: "Thao Bap",
-            img: "https://ss-images.saostar.vn/pc/1676043149351/saostar-tngc8l9lrrpml6tt.jpg",
-        },
-
-    ];
-
+    
+    const handleDelete =async (id) => {
+        await makeRequest.delete(`/stories/${id}`)
+        setStories(prev => prev.filter((story) => story.id !== id))
+    };
     return (
         <div className="stories">
-            <div className="story">
-                <img src={"../upload/" + currentUser.profilePic} alt="" />
-                <span>{currentUser.name}</span>
-                <button>+</button>
-            </div>
-            {stories.map(story => (
-                <div className="story" key={story.id}>
-                    <img src={story.img} alt="" />
-                    <span>{story.name}</span>
+            <div className="story-list">
+
+                <div className="story">
+                    <img src={"../upload/" + currentUser.profilePic} alt="" />
+                    <span>{currentUser.name}</span>
+                    <Link to={"/stories/create"}>
+                        <button>+</button>
+                    </Link>
                 </div>
-            ))}
+                {stories.map(story => (
+                    <Story key={story.id} story={story} handleDelete={handleDelete}/>
+                ))}
+            </div>
         </div>
     )
 }

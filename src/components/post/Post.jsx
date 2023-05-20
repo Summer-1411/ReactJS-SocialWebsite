@@ -15,18 +15,59 @@ const Post = ({ post, handleDeletePost }) => {
   //console.log(post.userId);
   const [commentOpen, setCommentOpen] = useState(false);
   const [likes, setLikes] = useState([]);
+  const [comments, setComments] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   const currentUser = useSelector((state) => state.user.currentUser);
+  const getLikes = async () => {
+    try {
+      const res = await makeRequest.get(`/likes?postId=${post.id}`);
+
+      setLikes(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getComments = async () => {
+    try {
+      const res = await makeRequest.get(`/comments?postId=${post.id}`);
+      setComments(res.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //console.log('re-render');
+  useEffect(() => {
+    getLikes();
+    getComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [post.id]);
 
   const handleDelete = () => {
     handleDeletePost(post.id);
     //deleteMutation.mutate(post.id);
   };
-
+  const handleLike = async () => {
+    let liked = likes.includes(currentUser.id);
+    if (liked) {
+      try {
+        setLikes((prev) => prev.filter((like) => like !== currentUser.id));
+        await makeRequest.delete(`/likes?postId=${post.id}`);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        setLikes((prev) => [...prev, currentUser.id]);
+        await makeRequest.post(`/likes`, { postId: post.id });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
   return (
     <div className="post">
       {post && (
@@ -60,21 +101,25 @@ const Post = ({ post, handleDeletePost }) => {
           <div className="info">
             <div className="item">
               {likes.includes(currentUser.id) ? (
-                <FavoriteOutlinedIcon style={{ color: "red" }} />
+                <FavoriteOutlinedIcon
+                  style={{ color: "red" }}
+                  onClick={handleLike}
+                />
               ) : (
-                <FavoriteBorderOutlinedIcon />
+                <FavoriteBorderOutlinedIcon onClick={handleLike} />
               )}
               {likes.length} Thích
             </div>
             <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
               <TextsmsOutlinedIcon />
-              Bình luận
+              {comments} Bình luận
             </div>
             <div className="item">
               <ShareOutlinedIcon />
               Chia sẻ
             </div>
           </div>
+          {commentOpen && <Comments postId={post.id} />}
         </div>
       )}
     </div>

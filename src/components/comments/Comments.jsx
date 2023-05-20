@@ -1,49 +1,71 @@
-
+import { useEffect, useState } from "react";
 import "./comments.scss";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
-const Comments = () => {
-    const currentUser  = {
-        profilePic: "https://i.pinimg.com/originals/4d/ce/ce/4dceced768a7c6cf8be6b16618f7ee1d.jpg",
-        name: "Tung"
+import { makeRequest } from "../../axios";
+import moment from "moment";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+const Comments = ({ postId }) => {
+  const [desc, setDesc] = useState("");
+  const [cmt, setCmt] = useState([]);
+
+  const currentUser = useSelector((state) => state.user.currentUser);
+
+  const getComments = async () => {
+    try {
+      const res = await makeRequest.get("/comments?postId=" + postId);
+      setCmt(res.data);
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
     }
-    //Temporary
-    const comments = [
-        {
-            id: 1,
-            desc: "",
-            name: "Tú Vũ",
-            userId: 1,
-            profilePicture:
-                "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        },
-        {
-            id: 2,
-            desc: "Đỉnh quá đi",
-            name: "Vũ",
-            userId: 2,
-            profilePicture:
-                "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-        },
-    ];
-    return (
-        <div className="comments">
-            <div className="write">
-                <img src={currentUser.profilePic} alt="" />
-                <input type="text" placeholder="write a comment" />
-                <button>Send</button>
-            </div>
-            {comments.map((comment) => (
-                <div className="comment">
-                    <img src={comment.profilePicture} alt="" />
-                    <div className="info">
-                        <span>{comment.name}</span>
-                        <p>{comment.desc}</p>
-                    </div>
-                    <span className="date">1 hour ago</span>
-                </div>
-            ))}
+  };
+  useEffect(() => {
+    getComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postId]);
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    await makeRequest.post("/comments", { desc, postId });
+    getComments();
+    setDesc("");
+    console.log("Send cmt");
+  };
+  const handleDeleteCmt = async (id) => {
+    await makeRequest.delete(`/comments/${id}`);
+    setCmt((prev) => prev.filter((cmt) => cmt.id !== id));
+  };
+
+  return (
+    <div className="comments">
+      <div className="write">
+        <img src={"../upload/" + currentUser.profilePic} alt="" />
+        <input
+          type="text"
+          placeholder="write a comment"
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+        />
+        <button onClick={handleClick}>Send</button>
+      </div>
+      {cmt.map((comment) => (
+        <div key={comment.id} className="comment">
+          <img src={"/upload/" + comment.profilePic} alt="" />
+          <Link className="info" to={`/profile/${comment.userId}`}>
+            <span>{comment.name}</span>
+            <p>{comment.description}</p>
+          </Link>
+          <span className="date">{moment(comment.createdAt).fromNow()}</span>
+          {comment.userId === currentUser.id && (
+            <DeleteOutlineIcon onClick={() => handleDeleteCmt(comment.id)} />
+          )}
         </div>
-    );
+      ))}
+    </div>
+  );
 };
 
 export default Comments;

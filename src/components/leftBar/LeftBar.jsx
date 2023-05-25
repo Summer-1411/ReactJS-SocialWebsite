@@ -1,4 +1,4 @@
-import "./leftbar.scss";
+import "./leftbar.scss"
 import Friends from "../../assets/1.png";
 import Groups from "../../assets/2.png";
 import Market from "../../assets/3.png";
@@ -13,21 +13,17 @@ import Tutorials from "../../assets/11.png";
 import Courses from "../../assets/12.png";
 import Fund from "../../assets/13.png";
 
+import { useSelector } from "react-redux";
 
-const LeftBar = () => {
-
-    
-
+export default function LeftBar() {
+    const currentUser = useSelector((state) => state.user.currentUser);
     return (
         <div className="leftBar">
             <div className="container">
                 <div className="menu">
                     <div className="user">
-                        <img
-                            src={Friends}
-                            alt=""
-                        />
-                        <span>Summer</span>
+                        <img src={"../upload/" +currentUser.profilePic} alt="" />
+                        <span>{currentUser.name}</span>
                     </div>
                     <div className="item">
                         <img src={Friends} alt="" />
@@ -92,7 +88,5 @@ const LeftBar = () => {
                 </div>
             </div>
         </div>
-    );
-};
-
-export default LeftBar;
+    )
+}

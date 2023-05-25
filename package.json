@@ -12,6 +12,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@tippyjs/react": "^4.2.6",
     "axios": "^1.4.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
@@ -19,9 +20,11 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
+    "react-slick": "^0.29.0",
     "react-toastify": "^9.1.2",
     "redux-persist": "^6.0.0",
     "sass": "^1.62.0",
+    "socket.io-client": "^4.6.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

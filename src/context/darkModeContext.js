@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 
 export const DarkModeContext = createContext()
 
-const DarkModeContextProvider = ({ children }) => {
+export const DarkModeContextProvider = ({ children }) => {
     const [darkMode, setDarkMode] = useState(JSON.parse(localStorage.getItem("darkMode")) || false)
 
     const toggle = () => {
@@ -16,5 +16,3 @@ const DarkModeContextProvider = ({ children }) => {
         <DarkModeContext.Provider value={{ toggle, darkMode }}>{children}</DarkModeContext.Provider>
     )
 }
-
-export default DarkModeContextProvider

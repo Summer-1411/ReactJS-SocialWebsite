@@ -2,25 +2,59 @@ import "./share.scss";
 import Image from "../../assets/img.png";
 import Map from "../../assets/map.png";
 import Friend from "../../assets/friend.png";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { makeRequest } from "../../axios";
+import { useSelector } from "react-redux";
+import { PostContext } from "../../context/postContext";
 
 const Share = () => {
+    const currentUser = useSelector((state) => state.user.currentUser);
+    const {setPosts } = useContext(PostContext)
     const [file, setFile] = useState(null)
     const [desc, setDesc] = useState('')
-    const currentUser  = {
-        profilePic: "https://i.pinimg.com/originals/4d/ce/ce/4dceced768a7c6cf8be6b16618f7ee1d.jpg",
-        name: "Tung"
-    }
 
+    const upload = async () => {
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+            const res = await makeRequest.post("/upload", formData);
+            return res.data;
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const handleClick = async (e) => {
+        e.preventDefault()
+        let imgUrl = "";
+        if (file) imgUrl = await upload();
+        const res = await makeRequest.post("/posts", { desc, img: imgUrl });
+        let date = Date.now()
+        console.log(res.data);
+        const newPost = {
+            id: res.data.id, 
+            description: desc, 
+            img: imgUrl, 
+            userId: currentUser.id, 
+            createdAt: date,
+            name: currentUser.name,
+            profilePic: currentUser.profilePic
+        }
+        setPosts(prev => [newPost, ...prev])
+        setDesc("");
+        setFile(null);
+    }
+    
+    //const currentUser = useSelector((state) => state.user.currentUser);
     return (
         <div className="share">
             <div className="container">
                 <div className="top">
                     <div className="left">
-                        <img src={currentUser.profilePic} alt="" />
+                        <img src={"../upload/" + currentUser.profilePic} alt="" />
                         <input
                             type="text"
-                            placeholder={`What's on your mind ${currentUser.name}?`}
+                            placeholder={`${currentUser.name} ơi, bạn đang nghĩ gì thế?`}
                             onChange={(e) => setDesc(e.target.value)}
                             value={desc}
                         />
@@ -38,20 +72,20 @@ const Share = () => {
                         <label htmlFor="file">
                             <div className="item">
                                 <img src={Image} alt="" />
-                                <span>Add Image</span>
+                                <span>Ảnh</span>
                             </div>
                         </label>
                         <div className="item">
                             <img src={Map} alt="" />
-                            <span>Add Place</span>
+                            <span>Địa điểm</span>
                         </div>
                         <div className="item">
                             <img src={Friend} alt="" />
-                            <span>Tag Friends</span>
+                            <span>Gắn thẻ</span>
                         </div>
                     </div>
                     <div className="right">
-                        <button>Share</button>
+                        <button onClick={handleClick}>Chia sẻ</button>
                     </div>
                 </div>
             </div>

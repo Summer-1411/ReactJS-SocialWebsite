@@ -5,6 +5,7 @@ $themes: (
         bgSoft: #f6f3f3,
         textColorSoft: #555,
         border: lightgray,
+        textBold: black
     ),
     dark: (textColor: whitesmoke,
         bg: #222,
@@ -12,8 +13,16 @@ $themes: (
         bgSoft: #333,
         textColorSoft: lightgray,
         border: #444,
+        textBold: white
     ),
 );
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 @mixin themify($themes) {
 
@@ -47,7 +56,7 @@ $themes: (
 }
 
 @mixin tablet {
-    @media (max-width: 960px) {
+    @media (min-width: 481px) and (max-width: 960px) {
         @content;
     }
 }
